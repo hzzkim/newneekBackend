@@ -40,14 +40,14 @@ public class GroundCateController {
 	
 	//수정
 	@PutMapping("/ground/update/{id}")
-	public ResponseEntity<GroundCateDTO> updateGroundCategory(@PathVariable int id, GroundCateDTO groundCateDto) {
+	public ResponseEntity<GroundCateDTO> updateGroundCategory(@PathVariable("id") int id, GroundCateDTO groundCateDto) {
 		GroundCateDTO updatedGroundCategory = groundCateService.updateGroundCategory(id, groundCateDto);
 		return ResponseEntity.ok(updatedGroundCategory);
 	}
 	
 	//삭제
 	@DeleteMapping("/ground/delete/{id}")
-	public void deleteGroundCategory(@PathVariable int id) {
+	public void deleteGroundCategory(@PathVariable("id") int id) {
 		boolean deleted = groundCateService.deleteGroundCategory(id);
 		if (!deleted) {
 			throw new RuntimeException("그라운드 카테고리 삭제 실패");
