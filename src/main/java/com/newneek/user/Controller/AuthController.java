@@ -35,4 +35,12 @@ public class AuthController {
         System.out.println(result);
         return result;
     }
+    
+    @PostMapping("/login")
+    public ResponeseDTO<?> login(@RequestBody LoginDTO requestBody){
+    
+        
+        return null;
+    }
+    
 }
