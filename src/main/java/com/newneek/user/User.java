@@ -1,28 +1,31 @@
 package com.newneek.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "user")
-@Data
+
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Builder
+@Data
+@Table( name = "user")
+
 public class User {
-	
-	@Id
-	@Column(name = "user_id", columnDefinition = "VARCHAR(36)", nullable = false)
-	private String userId;
-	
-	@Column(name = "email", columnDefinition = "VARCHAR(50)", nullable = false)
-	private String email;
-	
-	@Column(name = "pw", columnDefinition = "VARCHAR(20)", nullable = false)
-	private String password;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long user_id;
+    
+    @Column(length = 50)
+    private String email;
+    
+    @Column(length = 50)
+    private String pw;
+    
+
 }
