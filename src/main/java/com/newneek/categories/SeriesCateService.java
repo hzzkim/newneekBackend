@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class SeriesCateService {
 	
@@ -27,21 +29,24 @@ public class SeriesCateService {
 	}
 	
 	public List<SeriesCateDTO> getAllSeriesCategory() {
-		List<SeriesCate> seriesCate2 = seriesCateRepository.findAll();
-		List<SeriesCateDTO> seriesCateDto2 = new ArrayList<>();
-		for (SeriesCate seriesCate : seriesCate2) {
-			SeriesCateDTO seriesCateDto = new SeriesCateDTO(0, null);
-			seriesCateDto2.add(seriesCateDto);
-		}
-		return seriesCateDto2;
+	    List<SeriesCate> seriesCateList = seriesCateRepository.findAll();
+	    List<SeriesCateDTO> seriesCateDtoList = new ArrayList<>();
+	    
+	    for (SeriesCate seriesCate : seriesCateList) {
+	        SeriesCateDTO seriesCateDto = new SeriesCateDTO(seriesCate.getSeriesCategoryId(), seriesCate.getName());
+	        seriesCateDtoList.add(seriesCateDto);
+	    }
+	    return seriesCateDtoList;
 	}
-	
+
 	public SeriesCateDTO updateSeriesCategory(int id, SeriesCateDTO seriesCateDto) {
-		SeriesCate seriesCate = seriesCateRepository.findById(id).orElseThrow(() -> new RuntimeException("시리즈 카테고리를 찾을 수 없습니다"));
-		seriesCate.setName(seriesCateDto.getName());
-		
-		SeriesCate updatedSeriesCategory = seriesCateRepository.save(seriesCate);
-		return new SeriesCateDTO(updatedSeriesCategory.getSeriesCategoryId(), updatedSeriesCategory.getName());
+	    SeriesCate seriesCate = seriesCateRepository.findById(id)
+	        .orElseThrow(() -> new EntityNotFoundException("SeriesCate not found with id: " + id));
+	    
+	    seriesCate.setName(seriesCateDto.getName());
+	    
+	    SeriesCate updatedSeriesCategory = seriesCateRepository.save(seriesCate);
+	    return new SeriesCateDTO(updatedSeriesCategory.getSeriesCategoryId(), updatedSeriesCategory.getName());
 	}
 	 
 }// end
