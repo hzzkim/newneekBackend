@@ -17,7 +17,7 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable() // 필요에 따라 CSRF 비활성화
                 .authorizeRequests()
-                .requestMatchers("/api/**").permitAll() // "/api/**" 패턴에 대한 요청은 인증 없이 허용
+                .requestMatchers("/api/**", "/uploads/**").permitAll() // "/api/**" 패턴에 대한 요청은 인증 없이 허용
                 .anyRequest().authenticated(); // 그 외의 요청은 인증을 요구
 
         return http.build();

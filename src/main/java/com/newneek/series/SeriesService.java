@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,6 +20,7 @@ public class SeriesService {
 
     public Series createSeries(SeriesDto seriesDto) throws IOException {
         Series series = new Series();
+        series.setName(seriesDto.getName());
         series.setSeriesCategoryId(seriesDto.getSeriesCategoryId());
         series.setUserId(seriesDto.getUserId());
         series.setAbout(seriesDto.getAbout());
@@ -55,6 +57,11 @@ public class SeriesService {
         } catch (IOException e) {
             throw new RuntimeException("이미지 저장 실패", e);
         }
+    }
+
+    // 모든 시리즈 리스트를 가져오는 메서드
+    public List<Series> getAllSeries() {
+        return seriesRepository.findAll();
     }
 
 }

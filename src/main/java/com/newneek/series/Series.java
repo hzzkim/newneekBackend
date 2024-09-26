@@ -14,6 +14,9 @@ public class Series {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int seriesId;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "series_category_id", nullable = false)
     private int seriesCategoryId;
 

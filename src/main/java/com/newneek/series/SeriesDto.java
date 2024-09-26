@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 public class SeriesDto {
 
+    private String name;
     private int seriesCategoryId;
     private String userId;
     private String about;
