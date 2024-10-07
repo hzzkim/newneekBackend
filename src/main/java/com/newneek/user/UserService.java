@@ -1,12 +1,20 @@
 package com.newneek.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+   
+    private final UserRepository userRepository;
+    
+    private final TokenProvider tokenProvider;
+    
+    public UserService(UserRepository userRepository,TokenProvider tokenProvider) {
+    	this.userRepository = userRepository;
+    	this.tokenProvider = tokenProvider;
+    }
    
     public ResponseDTO<?> signup(UserDTO userDto) {
         String email = userDto.getEmail();
@@ -54,15 +62,21 @@ public class UserService {
     	User user=null;
     	try {
 			//값이 존재하는 경우 사용자 정보 불러옴(기준 email)
-    		user = userRepository.findById(email).get();
+    		//user = userRepository.findById(email).get();
+    		Optional<User> optionalUser = userRepository.findByEmail(email);
+    		if (optionalUser.isPresent()) {
+    			user = optionalUser.get();
+    		}else {
+    			return ResponseDTO.setFailed("해당 사용자가 존재하지 않습니다.");
+    		}
 			
 		}catch (Exception e) {
-			return ResponseDTO.setFailed("여기가 문제다");
+			return ResponseDTO.setFailed("사용자 정보를 불러오는 중 오류 발생.");
 		}
     	
     	user.setPw("");
     	
-    	TokenProvider tokenProvider = new TokenProvider();
+    	
     	int exprTime=3600;
     	String token=tokenProvider.createJwt(email,exprTime);
     	
