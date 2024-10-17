@@ -31,10 +31,10 @@ public class GroundCateController {
 	}
 	
 	
-	//조회
+	// 조회
 	@GetMapping("/ground/list")
 	public List<GroundCateDTO> getAllGroundCategory() {
-		return groundCateService.getAllGroundCategory();
+	    return groundCateService.getAllGroundCategory();
 	}
 	
 	

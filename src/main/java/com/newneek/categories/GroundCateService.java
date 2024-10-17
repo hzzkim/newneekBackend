@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class GroundCateService {
 
@@ -25,21 +27,24 @@ public class GroundCateService {
 	}
 	
 	public List<GroundCateDTO> getAllGroundCategory() {
-		List<GroundCate> groundCate2 = groundCateRepository.findAll();
-		List<GroundCateDTO> groundCateDto2 = new ArrayList<>();
-		for (GroundCate groundCate : groundCate2) {
-			GroundCateDTO groundCateDto = new GroundCateDTO(0, null);
-			groundCateDto2.add(groundCateDto);
-		}
-		return groundCateDto2;
+	    List<GroundCate> groundCateList = groundCateRepository.findAll();
+	    List<GroundCateDTO> groundCateDtoList = new ArrayList<>();
+	    
+	    for (GroundCate groundCate : groundCateList) {
+	        GroundCateDTO groundCateDto = new GroundCateDTO(groundCate.getGroundCategoryId(), groundCate.getName());
+	        groundCateDtoList.add(groundCateDto);
+	    }
+	    return groundCateDtoList;
 	}
 	
 	public GroundCateDTO updateGroundCategory(int id, GroundCateDTO groundCateDto) {
-		GroundCate groundCate = groundCateRepository.findById(id).orElseThrow(() -> new RuntimeException());
-		groundCate.setName(groundCateDto.getName());
-		
-		GroundCate updatedGroundCategory = groundCateRepository.save(groundCate);
-		return new GroundCateDTO(updatedGroundCategory.getGroundCategoryId(), updatedGroundCategory.getName());
+	    GroundCate groundCate = groundCateRepository.findById(id)
+	        .orElseThrow(() -> new EntityNotFoundException("GroundCate not found with id: " + id));
+	    
+	    groundCate.setName(groundCateDto.getName());
+	    
+	    GroundCate updatedGroundCategory = groundCateRepository.save(groundCate);
+	    return new GroundCateDTO(updatedGroundCategory.getGroundCategoryId(), updatedGroundCategory.getName());
 	}
 	
 }// end

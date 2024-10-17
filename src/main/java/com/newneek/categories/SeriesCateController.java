@@ -32,26 +32,26 @@ public class SeriesCateController {
 	}
 	
 	
-	//조회
+	// 조회
 	@GetMapping("/series/list")
 	public List<SeriesCateDTO> getAllSeriesCategory() {
-		return seriesCateService.getAllSeriesCategory();
+	    return seriesCateService.getAllSeriesCategory();
 	}
-	
-	
-	
-	//수정
+
+
+	// 수정
 	@PutMapping("/series/update/{id}")
-	public ResponseEntity<SeriesCateDTO> updateSeriesCategory(@PathVariable int id, SeriesCateDTO seriesCateDto) {
-		SeriesCateDTO updatedSeriesCategory = seriesCateService.updateSeriesCategory(id, seriesCateDto);
-		return ResponseEntity.ok(updatedSeriesCategory);
+	public ResponseEntity<SeriesCateDTO> updateSeriesCategory(@PathVariable("id") int id, SeriesCateDTO seriesCateDto) {
+	    SeriesCateDTO updatedSeriesCategory = seriesCateService.updateSeriesCategory(id, seriesCateDto);
+	    return ResponseEntity.ok(updatedSeriesCategory);
 	}
+
 	
 	
 	
 	//삭제
 	@DeleteMapping("/series/delete/{id}")
-	public void deleteSeriesCategory(@PathVariable int id) {
+	public void deleteSeriesCategory(@PathVariable("id") int id) {
 		boolean deleted = seriesCateService.deleteSeriesCategory(id);
 		if (!deleted) {
 			throw new RuntimeException("시리즈 카테고리 삭제 실패");
