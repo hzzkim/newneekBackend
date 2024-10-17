@@ -1,17 +1,20 @@
 package com.newneek.user;
 
+import jakarta.validation.constraints.NotBlank;  // 여기서 jakarta.validation을 사용
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
-	
-	private String userId;
+
+public class LoginDTO {
+
+	@NotBlank
 	private String email;
-	private String password;
-	
-	
+	@NotBlank
+	private String pw;
+
 }

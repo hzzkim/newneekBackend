@@ -1,25 +1,18 @@
-package com.newneek.user.Controller;
+package com.newneek.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.newneek.user.UserService;
-import com.newneek.user.DTO.UserDTO;
-import com.newneek.user.DTO.ResponseDTO;
-
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    // MemberService를 의존성 주입 받음
-    @Autowired
     private final UserService userService;
 
     // 생성자 주입 방법도 사용할 수 있음
@@ -35,4 +28,13 @@ public class AuthController {
         System.out.println(result);
         return result;
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO requestBody) {
+        ResponseEntity<?> result = userService.login(requestBody);
+        return result;
+
+    }
+
+
 }

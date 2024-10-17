@@ -1,4 +1,4 @@
-package com.newneek.user.DTO;
+package com.newneek.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class UserDTO {
-	
-	private String email;
-	private String pw;
-	
+public class LoginResponseDTO {
+
+	private String token;
+	private int exprTime;
+	private User user;
 }

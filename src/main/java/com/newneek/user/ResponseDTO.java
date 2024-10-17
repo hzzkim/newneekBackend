@@ -1,4 +1,4 @@
-package com.newneek.user.DTO;
+package com.newneek.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,4 +29,6 @@ public class ResponseDTO<D> {
     public static <D> ResponseDTO<D> setFailedData(String message, D data) {
         return ResponseDTO.set(false, message, data);
     }
+
+
 }

@@ -29,6 +29,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+	implementation("org.springframework.boot:spring-boot-starter-validation:3.3.3")
+	implementation("com.nimbusds:nimbus-jose-jwt:9.31") //jwt token
+	implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
+	
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 	annotationProcessor("org.projectlombok:lombok")
@@ -42,7 +47,5 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs << '-parameters'
-}
+
 
