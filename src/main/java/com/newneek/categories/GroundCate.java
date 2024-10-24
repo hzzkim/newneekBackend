@@ -5,14 +5,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table( name = "ground_category" )
+@Table(name = "ground_category")
 @Getter
 @Setter
 public class GroundCate {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ground_category_id")
-	private int groundCategoryId;
-	private String name;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ground_category_id")
+    private int groundCategoryId;
+
+    private String name;
+
+    private String url; // URL 항목 추가
 }

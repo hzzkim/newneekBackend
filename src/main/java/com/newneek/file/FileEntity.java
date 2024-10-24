@@ -1,4 +1,4 @@
-package com.newneek.entity;
+package com.newneek.file;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

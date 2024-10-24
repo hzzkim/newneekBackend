@@ -1,6 +1,4 @@
-package com.newneek.repository;
-
-import com.newneek.entity.FileEntity;
+package com.newneek.file;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
