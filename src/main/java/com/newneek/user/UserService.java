@@ -55,42 +55,30 @@ public class UserService {
     }//signup
 
     // 로그인 로직
-    public ResponseEntity<?> login(LoginDTO loginDto) {
+    public String login(LoginDTO loginDto) {
         String email = loginDto.getEmail();
         String pw = loginDto.getPw();
         User user;
 
-        // 이메일로 사용자 조회
         try {
+            // 이메일로 사용자 조회 및 비밀번호 검증
             user = userRepository.findByEmail(email).orElse(null);
-            if (user == null) {
-                return ResponseEntity.badRequest().body(ResponseDTO.setFailed("입력하신 이메일로 등록된 계정이 존재하지 않습니다."));
+            if (user == null || !passwordEncoder.matches(pw, user.getPw())) {
+                return null;  // 인증 실패 시 null 반환
             }
+            
+            // 토큰 생성 후 반환
+            int exprTime = 3600; // 만료 시간 설정
+            return tokenProvider.createJwt(user.getUser_id(),email, exprTime);
 
-            // 저장된 암호화된 비밀번호와 입력된 비밀번호 비교
-            if (!passwordEncoder.matches(pw, user.getPw())) {
-                return ResponseEntity.badRequest().body(ResponseDTO.setFailed("비밀번호가 일치하지 않습니다."));
-            }
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(ResponseDTO.setFailed("데이터베이스 연결에 실패하였습니다."));
+            e.printStackTrace();
+            return null;  // 오류 발생 시 null 반환
         }
-
-        // 비밀번호 숨기기
-        user.setPw("");  // 클라이언트로 비밀번호를 제공하지 않음
-
-        // 토큰 생성
-        int exprTime = 3600;
-        String token = tokenProvider.createJwt(email, exprTime);
-
-        if (token == null) {
-            return ResponseEntity.status(500).body(ResponseDTO.setFailed("토큰 생성 실패"));
-        }
-
-        // 토큰을 헤더에 넣어 반환
-        LoginResponseDTO loginResponseDto = new LoginResponseDTO(token, exprTime, user);
-        return ResponseEntity.ok()
-            .header("Authorization", "Bearer " + token)  // 토큰을 Authorization 헤더에 추가
-            .body(ResponseDTO.setSuccessData("로그인 성공", loginResponseDto));  // 응답 바디에 결과 반환
     }//login
+    
+    public User getUserByEmail(String email) {
+    	return userRepository.findByEmail(email).orElse(null);
+    }
 
 }
