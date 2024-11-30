@@ -31,4 +31,6 @@ public class NewneekApplication {
             System.err.println("----데이터베이스 연결 실패: " + e.getMessage());
         }
     }
+    
+    
 }

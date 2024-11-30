@@ -69,14 +69,13 @@ public class UserService {
             
             // 토큰 생성 후 반환
             int exprTime = 3600; // 만료 시간 설정
-            return tokenProvider.createJwt(email, exprTime);
+            return tokenProvider.createJwt(user.getUser_id(),email, exprTime);
 
         } catch (Exception e) {
             e.printStackTrace();
             return null;  // 오류 발생 시 null 반환
         }
-    }
-//login
+    }//login
     
     public User getUserByEmail(String email) {
     	return userRepository.findByEmail(email).orElse(null);

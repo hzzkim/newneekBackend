@@ -20,70 +20,76 @@ import com.nimbusds.jwt.SignedJWT;
 @Service
 public class TokenProvider {
 
-		private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-	    private static final String SECURITY_KEY = "ThisIsA32ByteLengthSecurityKey!!";
+    private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
+    private static final String SECURITY_KEY = "ThisIsA32ByteLengthSecurityKey!!";
 
-	    // JWT 생성 메서드
-	    public String createJwt(String email, int duration) {
-	        try {
-	            // 현재 시간 기준으로 만료 시간을 설정
-	            Instant now = Instant.now();
-	            Instant exprTime = now.plusSeconds(duration);
+    // JWT 생성 메서드
+    public String createJwt(String userId, String email, int duration) {
+        try {
+            Instant now = Instant.now();
+            Instant exprTime = now.plusSeconds(duration);
 
-	            // JWT Claim 설정 (페이로드 설정)
-	            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-	                    .subject(email)
-	                    .issueTime(Date.from(now))
-	                    .expirationTime(Date.from(exprTime))
-	                    .build();
+            // email과 user_id를 클레임으로 추가
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(userId) // 기본적으로 subject에는 userId를 저장
+                    .claim("email", email) // 추가 클레임으로 email 저장
+                    .issueTime(Date.from(now))
+                    .expirationTime(Date.from(exprTime))
+                    .build();
 
-	            // JWT 서명 설정 (헤더와 페이로드 포함)
-	            SignedJWT signedJWT = new SignedJWT(
-	                    new JWSHeader(JWSAlgorithm.HS256),
-	                    claimsSet
-	            );
+            SignedJWT signedJWT = new SignedJWT(
+                    new JWSHeader(JWSAlgorithm.HS256),
+                    claimsSet
+            );
 
-	            // HMAC 서명을 사용하여 JWT 서명
-	            JWSSigner signer = new MACSigner(SECURITY_KEY.getBytes());
-	            signedJWT.sign(signer);
+            JWSSigner signer = new MACSigner(SECURITY_KEY.getBytes());
+            signedJWT.sign(signer);
 
-	            // JWT 직렬화 및 반환
-	            String jwt = signedJWT.serialize();
-	            System.out.println("생성된 JWT: " + jwt);  // 생성된 JWT 확인용 로그
-	            return jwt;
-	            
-	        } catch (JOSEException e) {
-	            logger.error("JWT 생성 중 오류 발생", e);
-	            return null;
-	        }
-	    }
+            String jwt = signedJWT.serialize();
+            System.out.println("생성된 JWT: " + jwt);
+            return jwt;
 
+        } catch (JOSEException e) {
+            logger.error("JWT 생성 중 오류 발생", e);
+            return null;
+        }
+    }
 
-	    public static String validateJwt(String token) {
-	        try {
-	            // 검증할 토큰을 로그에 출력하여 확인
-	            System.out.println("검증할 토큰: " + token);
-	            
-	            // JWT 파싱 및 검증
-	            SignedJWT signedJWT = SignedJWT.parse(token);
-	            JWSVerifier verifier = new MACVerifier(SECURITY_KEY.getBytes());
-	            
-	            // 서명이 유효한지 확인
-	            if (signedJWT.verify(verifier)) {
-	                // 서명이 유효하면 주체(subject)를 반환
-	                return signedJWT.getJWTClaimsSet().getSubject();
-	            } else {
-	                // 서명이 유효하지 않음
-	                logger.warn("JWT 서명이 유효하지 않습니다.");
-	                return null;
-	            }
-	            
-	        } catch (Exception e) {
-	            // 예외 발생 시 오류 로그 출력
-	            logger.error("JWT 검증 중 오류 발생", e);
-	            return null;
-	        }
-	    }
+    // JWT 검증 및 subject 추출
+    public String validateJwt(String token) {
+        try {
+            System.out.println("검증할 토큰: " + token);
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            JWSVerifier verifier = new MACVerifier(SECURITY_KEY.getBytes());
 
-	    
+            if (signedJWT.verify(verifier)) {
+                return signedJWT.getJWTClaimsSet().getSubject();
+            } else {
+                logger.warn("JWT 서명이 유효하지 않습니다.");
+                return null;
+            }
+
+        } catch (Exception e) {
+            logger.error("JWT 검증 중 오류 발생", e);
+            return null;
+        }
+    }
+
+    // 토큰에서 user_id(subject)를 추출하는 메서드 추가
+    public String getUserIdFromToken(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            JWSVerifier verifier = new MACVerifier(SECURITY_KEY.getBytes());
+
+            if (signedJWT.verify(verifier)) {
+                return signedJWT.getJWTClaimsSet().getSubject();
+            } else {
+                logger.warn("JWT 서명이 유효하지 않습니다.");
+                return null;
+            }
+        } catch (Exception e) {
+            logger.error("JWT 토큰 검증 중 오류 발생", e);
+            return null;
+        }
+    }
 }

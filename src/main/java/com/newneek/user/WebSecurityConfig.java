@@ -6,39 +6,55 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+
     @Bean
-    // 어떠한 url로 진입을 해도 로그인 페이지로 인도
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // 403, "http.csrf.disable()" deprecated
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        // HTTP 요청에 대한 권한 설정, 모든 경로로 지정("/**")
-                        // permitAll() : 해당 요청에 대한 모든 사용자에게 접근 권한 부여
-                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
+                .csrf(csrf -> csrf.disable()) // CSRF 비활성화
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 적용
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/**").permitAll() // 모든 경로에 접근 허용
                 );
 
         return http.build();
     }
 
     @Bean
-    // BCryptPasswordEncoder의 interface
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    // Spring 보안 및 인증 담당
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true); // 자격 증명 허용
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 허용할 도메인
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
+        configuration.setAllowedHeaders(List.of("*")); // 허용할 헤더
+        configuration.setExposedHeaders(List.of("Authorization")); // 노출할 헤더
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+    
+ 
+
 }
