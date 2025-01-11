@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UserDTO {
-	
+
 	private String user_id;
 	private String email;
 	private String pw;
@@ -21,8 +21,8 @@ public class UserDTO {
 	private String gender; // 'M', 'F', 'UN'
 	private Integer birthyear;
 	private String profile; // 데이터베이스에 저장될 경로
-	private transient MultipartFile profileFile; // 요청으로 받는 파일
-	
+	private MultipartFile profileFile; // 요청으로 받는 파일
+
 	public String getGender() {
         return gender != null ? gender : "UN"; // 기본값 'UN' 처리
     }

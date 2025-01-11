@@ -1,6 +1,5 @@
 package com.newneek.user;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +65,7 @@ public class UserService {
             if (user == null || !passwordEncoder.matches(pw, user.getPw())) {
                 return null;  // 인증 실패 시 null 반환
             }
-            
+
             // 토큰 생성 후 반환
             int exprTime = 3600; // 만료 시간 설정
             return tokenProvider.createJwt(user.getUser_id(),email, exprTime);
@@ -76,7 +75,7 @@ public class UserService {
             return null;  // 오류 발생 시 null 반환
         }
     }//login
-    
+
     public User getUserByEmail(String email) {
     	return userRepository.findByEmail(email).orElse(null);
     }
