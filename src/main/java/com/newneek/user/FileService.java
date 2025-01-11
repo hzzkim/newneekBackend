@@ -12,7 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileService {
-    @Value("${file.upload-dir:/absolute/path/to/uploads/}")
+
+    @Value("${file.upload-dir:/Users/hyozzang/git/newneekBackend/uploads}")
     private String uploadDir;
 
     public String saveProfileImage(MultipartFile file) throws IOException {
@@ -24,17 +25,10 @@ public class FileService {
             Files.createDirectories(path.getParent());
         }
 
-        // 디버깅 메시지
         System.out.println("저장 경로: " + path.toAbsolutePath().toString());
-        System.out.println("디렉토리 존재 여부: " + Files.exists(path.getParent()));
 
         // 파일 저장
-        try {
-            Files.write(path, file.getBytes());
-        } catch (IOException e) {
-            System.err.println("파일 저장 실패: " + e.getMessage());
-            throw e;
-        }
+        Files.write(path, file.getBytes());
         return fileName; // 저장된 파일 이름 반환
     }
 }

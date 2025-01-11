@@ -1,6 +1,5 @@
 package com.newneek.user;
 
-import com.newneek.user.UserDTO;
 import org.hibernate.annotations.UuidGenerator;
 
 import jakarta.persistence.Column;
@@ -43,17 +42,17 @@ public class User {
 
     @Column(length = 500)
     private String about;
-    
+
     @Column(columnDefinition = "ENUM('M', 'F', 'UN') DEFAULT 'UN'")
     private String gender; // ENUM 값: 'M', 'F', 'UN'
 
     @Column
     private Integer birthyear;
-    
+
     @Column(name = "profile", length = 200, nullable = true)
     private String profile; // 프로필 이미지 파일 경로 저장
 
-    
+
 
 
     public User(UserDTO userDto) {
