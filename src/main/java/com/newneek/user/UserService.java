@@ -42,6 +42,7 @@ public class UserService {
         // User 객체 생성
         User user = new User(userDto);
         user.setPw(hashedPassword);  // 암호화된 비밀번호 저장
+        // System.out.println("암호화된 비밀번호 길이: " + hashedPassword.length());
 
         // UserRepository를 이용하여 DB에 사용자 정보 저장
         try {
@@ -68,7 +69,7 @@ public class UserService {
 
             // 토큰 생성 후 반환
             int exprTime = 3600; // 만료 시간 설정
-            return tokenProvider.createJwt(user.getUser_id(),email, exprTime);
+            return tokenProvider.createJwt(user.getUserId(),email, exprTime);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -26,7 +26,8 @@ public class User {
     @Id
     @GeneratedValue
     @UuidGenerator
-    private String user_id;
+    @Column(name = "user_id")
+    private String userId;
 
     @Column(length = 50,unique = true)
     private String email;

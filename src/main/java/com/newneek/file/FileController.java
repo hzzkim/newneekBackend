@@ -1,6 +1,5 @@
-package com.newneek.controller;
+package com.newneek.file;
 
-import com.newneek.entity.FileEntity;
 import com.newneek.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
